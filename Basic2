@@ -1,0 +1,108 @@
+Regular expression - the easy way
+Bài đăng này đã không được cập nhật trong 4 năm
+
+Regular expression (viết tắt là Regex) là một chuỗi ký tự đặc biệt được dùng làm mẫu (pattern) để phân tích, tìm kiếm sự trùng hợp nào đó trong một chuỗi nào đó. Chúng ta thường sử dụng regex để validate dữ liệu đầu vào như email, số điện thoại,... hay mới đây là dùng để filter file đầu vào để bundle trong webpack. Eg: /\.(css|scss)$/ dùng để bundle các file css có kết thúc là .css hoặc .scss
+
+Meta character
+Meta character là những ký tự đặc biệt thường đi kèm với nhau để tạo thành 1 chuỗi regular expression. Mỗi ký tự có một ý nghĩa riêng và được viết trong ngoặc [. Dưới đây là bảng mô tả ý nghĩa của một vài ký tự đặc biệt:
+
+Ký tự	Ý nghĩa
+.	Match bất kỳ 1 ký tự nào ngoại trừ dấu ngắt dòng (line break)
+[ ]	Match bất kỳ ký tự nào nằm trong nó
+[^]	Match bất kỳ ký tự nào không có trong nó
+*	0 hoặc nhiều hơn sự lăp lại của ký tự trước nó
++	1 hoặc nhiều hơn sự lặp lại của ký tự trước nó
+?	Chỉ ra rằng ký tự trước nó là tùy chọn (không bắt buộc)
+{n, m}	match sự lặp lại của ký tự trước nó trong khoảng từ n tới m
+(xyz)	Nhóm các ký tự theo chính xác thứ tự
+\	Tránh việc match các ký tự đặc biệt như [ ] ( ) { } . * + ? ^ $ \
+^	Bắt đầu của 1 chuỗi input
+$	Kết thúc của 1 chuỗi
+I	Match ký tự trước hoặc sau nó
+Bây giờ đi vào chi tiết với từng ví dụ cụ thể:
+
+1. Dấu chấm
+Dùng để tìm sự trùng khớp với bất kỳ 1 ký tự nào trừ dấu ngắt dòng: Eg: .ar sẽ match bất kỳ ký tự nào theo sau bởi ar
+
+The car parked in the garage.
+
+2. Ngoặc vuông
+Định nghĩa nhóm các ký tự được match trong nó. Và thứ tự trong của các ký tự trong nó không ảnh hưởng đến kết quả. Eg: [Tt]he sẽ match ký tự T hoặc t mà theo sau nó là he
+
+The car parked in the garage.
+
+2.1 Dấu ^
+Bình thường thì nó sẽ là dấu hiệu của bắt đầu 1 chuỗi nhưng khi ở trong dấu ngoặc vuông [] thì nó sẽ không match ký tự nào sau nó. Eg: [^c]ar sẽ không match từ car trong ví dụ trên:
+
+The car parked in the garage.
+
+3. Nhóm các ký tự lặp +, *, ?
+3.1 Dấu sao *
+Bình thường nó sẽ match sự lặp lại của từ trước nó 0 hoặc nhiều lần. Ví dụ, a* có nghĩa là sẽ match sự lặp lại của ký tự a 0 hoặc nhiều lần. Nhưng nếu nó được đặt sau dấu ngoặc vuông [] thì có nghĩa là sẽ tìm sự lặp lại của cả nhóm ký tự trong đó. Eg: [ar]* thì kết quả sẽ như sau:
+
+The car parked in the garage.
+
+Chúng ta cũng có thể dùng nó để match với dấu cách qua biểu thức: \s*cat\s*. mọi người xem kết quả rõ hơn ở đây nhé 😄 eg details
+
+The fat cat sat on the concatenation.
+
+3.2 Dấu cộng +
+nó sẽ match 1 hoặc nhiều hơn sự lặp lại của ký tự trước nó Eg: c.+t có nghĩa là bất kỳ chuỗi ký tự nào được bắt đầu bằng c và kết thúc bằng t
+
+The fat cat sat on the concatenation.
+
+3.5 Dấu hỏi chấm ?
+Eg: [h]?e sẽ match những ký tự chứa e và cả những chuỗi có chữ h ngay phía trước chữ e
+
+The car is parked in the garage.
+
+4. Dâú ngoặc nhọn {}
+Định nghĩa số lần lặp trong khoảng của một ký tự hoặc 1 nhóm ký tự. Eg: [o]{1,3} sẽ match ký tự o xuất hiện trong khoảng từ 1 - 3 lần
+
+Mongoose
+
+5. Dấu ngoặc đơn ()
+Là 1 nhóm của các pattern. Eg: (c|g|p)ar sẽ match các từ car, gar, par
+
+The car is parked in the garage.
+
+6. Dấu |
+Giống như điều kiện hoặc trong lập trình vậy. Eg: (T|t)he|car sẽ match The hoặc the hoặc car
+
+The car is parked in the garage.
+
+7. Dấu \
+Tránh việc match các ký tự đặc biệt như [ ] ( ) { } . * + ? ^ $ \ | Eg: at\. sẽ chỉ match ký tự at.
+
+The fat cat sat on the mat.
+
+8. Dấu ^
+Dùng để match ký tự bắt đầu của 1 chuỗi. Eg: ^(T|t)he sẽ match từ The
+
+The fat rat sat on the mat.
+
+9. Dấu $
+Dùng để match xem ký tự đó có phải là cuối của 1 chuỗi không Eg: (at\.)$ và kết quả sẽ là:
+
+The fat. rat. sat. on the mat.
+
+Shorthand Character sets
+Regex còn có sẵn một số đoạn viết gọn lại rất tiện như:
+
+Shorthand	Description
+\w	các ký tự cả số và chữ thay vì viết đầy đủ: [a-zA-Z0-9_]
+\W	tương đương: [^\w]
+\d	các chữ số thay vì viết đủ: [0-9]
+\D	tương đương: [^\d]
+\s	khoảng trắng thay vì viết đầy đủ: [\t\n\f\r\p{Z}]
+\S	tương đương : [^\s]
+Most common modifiers
+Modifiers	Description
+i	không phân biệt ký tự hoa hay thường (case sensitive)
+g	global search: tìm kiếm trong toàn bộ chuỗi theo pattern trước nó
+m	multiple line match
+u	tìm kiếm ký tự theo unicode
+A	check bắt đầu của 1 chuỗi (gần giống ^) trừ engine trong JS
+J	cho phép trùng pattern
+Reference
+Learn regex - the easy way
